@@ -25,7 +25,9 @@ app.use('/', (req, res, next) => {
 
     if(!rules) {
         res.redirect('/reverseProxyError');
+        return;
     }
+
 
     let target = '';
 
