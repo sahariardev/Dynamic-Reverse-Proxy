@@ -1,13 +1,6 @@
-import https from 'https'
 import express from 'express';
-import dotenv from 'dotenv'
-import fs from 'fs';
 import httpProxy from 'http-proxy';
 import cookieParser from 'cookie-parser';
-
-dotenv.config();
-
-const PORT = process.env.PORT || 443;
 
 const app = express();
 
@@ -92,11 +85,5 @@ app.get('/reverseProxySetCookie', (req, res) => {
     res.redirect('/');
 });
 
-https.createServer({
-    cert: fs.readFileSync('cert.pem'),
-    key: fs.readFileSync('key.pem')
-}, app).listen(PORT, () => {
-    console.log(`Server started on port ${PORT}`)
-});
 
-
+export default app;

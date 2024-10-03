@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js",
-    "start": "node index.js"
+    "dev": "nodemon src/main.js",
+    "start": "node src/main.js"
   },
   "author": "Sahariar Alam Khandoker",
   "license": "ISC",
