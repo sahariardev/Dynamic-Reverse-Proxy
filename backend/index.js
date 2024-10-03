@@ -62,19 +62,22 @@ app.use('/', (req, res, next) => {
         targetRule = defaultRule;
     }
 
-    if (url.startsWith('/reverseProxyStatus') || url.startsWith('/reverseProxySetCookie')) {
+    if (url.startsWith('/reverseProxyStatus')
+        || url.startsWith('/reverseProxyError')
+        || url.startsWith('/reverseProxySetCookie')) {
         next();
         return;
     }
 
+    return proxy.web(req, res, {target: targetRule.path, changeOrigin: true}, (error) => {
+        res.redirect('/reverseProxyError');
+    });
+});
 
-    try {
-        return proxy.web(req, res, {target: targetRule.path, changeOrigin: true});
-
-    } catch (error) {
-        console.log('error')
-        res.redirect('/reverseProxyStatus');
-    }
+app.get('/reverseProxyError', (req, res) => {
+    return res.json({
+        message: 'server is not up'
+    })
 });
 
 app.get('/reverseProxyStatus', (req, res) => {
