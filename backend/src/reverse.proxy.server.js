@@ -1,27 +1,12 @@
 import express from 'express';
 import httpProxy from 'http-proxy';
 import cookieParser from 'cookie-parser';
+import {getConfig} from "./config.service.js";
 
 const app = express();
 
 app.use(cookieParser());
 const proxy = httpProxy.createProxy({});
-
-const cookieMap = new Map();
-cookieMap.set('default', [
-    {
-        key: '/',
-        path: 'http://localhost:8001'
-    },
-
-]);
-
-cookieMap.set('dataTableTest', [
-    {
-        key: '/',
-        path: 'http://localhost:8000'
-    },
-]);
 
 app.use('/', (req, res, next) => {
 
@@ -30,10 +15,10 @@ app.use('/', (req, res, next) => {
     console.log(workingFeature);
 
     const url = req.originalUrl;
-    let rules = cookieMap.get('default');
+    let rules = getConfig(workingFeature);
 
-    if (cookieMap.has(workingFeature)) {
-        rules = cookieMap.get(workingFeature);
+    if(!rules) {
+        res.redirect('/reverseProxyError');
     }
 
     let target = '';
@@ -69,7 +54,7 @@ app.use('/', (req, res, next) => {
 
 app.get('/reverseProxyError', (req, res) => {
     return res.json({
-        message: 'server is not up'
+        message: 'server is not up. Please set proper configuration'
     })
 });
 
