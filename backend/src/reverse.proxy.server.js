@@ -9,12 +9,18 @@ app.use(cookieParser());
 const proxy = httpProxy.createProxy({});
 
 app.use('/', (req, res, next) => {
+    const url = req.originalUrl;
+    if (url.startsWith('/reverseProxyStatus')
+        || url.startsWith('/reverseProxyError')
+        || url.startsWith('/reverseProxySetCookie')) {
+        next();
+        return;
+    }
 
     const workingFeature = req.cookies.feature || 'default';
 
     console.log(workingFeature);
 
-    const url = req.originalUrl;
     let rules = getConfig(workingFeature);
 
     if(!rules) {
@@ -38,13 +44,6 @@ app.use('/', (req, res, next) => {
 
     if (targetRule == null) {
         targetRule = defaultRule;
-    }
-
-    if (url.startsWith('/reverseProxyStatus')
-        || url.startsWith('/reverseProxyError')
-        || url.startsWith('/reverseProxySetCookie')) {
-        next();
-        return;
     }
 
     return proxy.web(req, res, {target: targetRule.path, changeOrigin: true}, (error) => {
