@@ -1,10 +1,11 @@
 import {useState} from "react";
+import {useNavigate} from "react-router-dom";
 
 const RuleForm =  () => {
 
     const [rules, setRules] = useState([{url: '', host: ''}]);
     const [featureName, setFeatureName] = useState('');
-
+    const navigate = useNavigate();
     const addNewRule = () => {
         setRules([...rules, {url: '', host: ''}]);
     }
@@ -71,40 +72,60 @@ const RuleForm =  () => {
     }
 
     return (
-        <div className="w-2/4">
-            <div className="">
-                <div className="flex flex-wrap -m-2">
-                    <div className="p-2 w-full">
-                        <div className="relative">
-                            <input type="text" id="featurName" name="featurName"
-                                   placeholder="Feature Name"
-                                   value={featureName}
-                                   onChange={(e) => setFeatureName(e.target.value)}
-                                   className="w-full bg-gray-100 bg-opacity-50 rounded
+        <div className="container mx-auto pt-24 w-full">
+            <div>
+                <div className="flex flex-col text-center w-full mb-20">
+                    <h1 className="sm:text-4xl text-3xl font-medium title-font mb-2 text-gray-900">Config</h1>
+                    <p className="lg:w-2/3 mx-auto leading-relaxed text-base">If the user does not select any feature,
+                        the feature named 'default' will be automatically used to handle the user's request. Rule Order decides the priority</p>
+                </div>
+            </div>
+            <div className="w-2/4 m-auto">
+                <div className="">
+                    <div className="">
+                        <div className="flex flex-wrap -m-2">
+                            <div className="p-2 w-full">
+                                <div className="relative">
+                                    <input type="text" id="featurName" name="featurName"
+                                           placeholder="Feature Name"
+                                           value={featureName}
+                                           onChange={(e) => setFeatureName(e.target.value)}
+                                           className="w-full bg-gray-100 bg-opacity-50 rounded
                                            border border-gray-300 focus:border-indigo-500 focus:bg-white
                                            focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700
                                            py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"/>
-                        </div>
-                    </div>
+                                </div>
+                            </div>
 
-                    {generateRulesSection()}
+                            {generateRulesSection()}
 
-                    <div className="p-2 w-0.5/4">
-                        <button
-                            onClick={(e) => addNewRule()}
-                            className="flex text-white bg-indigo-500 border-0 py-2
+                            <div className="p-2 w-0.5/4">
+                                <button
+                                    onClick={(e) => addNewRule()}
+                                    className="flex text-white bg-indigo-500 border-0 py-2
                                  px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Add Rule
-                        </button>
-                    </div>
+                                </button>
+                            </div>
 
-                    <div className="p-2 w-0.5/4">
-                        <button className="flex text-white bg-indigo-500 border-0 py-2
+                            <div className="p-2 w-0.5/4">
+                                <button className="flex text-white bg-indigo-500 border-0 py-2
                                  px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Save
-                        </button>
+                                </button>
+                            </div>
+
+                            <div className="p-2 w-0.5/4">
+                                <button
+                                    onClick={() => navigate('/')}
+                                    className="flex text-white bg-indigo-500 border-0 py-2
+                                 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Back
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
     );
 }
 
