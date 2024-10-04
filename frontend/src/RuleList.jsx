@@ -2,16 +2,11 @@ import {useRuleStore} from "./hooks/useRuleStore.js";
 import {useNavigate} from "react-router-dom";
 
 const RuleList = () => {
-    const {updateSelectedRule} = useRuleStore();
+    const {setDefaultForRule} = useRuleStore();
     const navigate = useNavigate();
 
     const addNew = () => {
-        const config = {
-            configName : '',
-            rules: []
-        }
-
-        updateSelectedRule(config);
+        setDefaultForRule();
         navigate('/form');
     }
 

@@ -1,32 +1,51 @@
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {useRuleStore} from "./hooks/useRuleStore.js";
+import {addNewConfigUrl} from "./config.js";
 
 const RuleForm =  () => {
 
-    const [rules, setRules] = useState([{url: '', host: ''}]);
-    const [featureName, setFeatureName] = useState('');
     const navigate = useNavigate();
-    const addNewRule = () => {
-        setRules([...rules, {url: '', host: ''}]);
+    const {selectedRule, updateSelectedRule, setValueForRule, removeRule, addNewRule, setFeatureName} = useRuleStore();
+    const addNewRuleHandler = () => {
+        addNewRule()
     }
 
-    const removeRule = (index) => {
-        let data = [...rules];
-        data.splice(index, 1);
-        setRules(data);
+    const featureNameHandler = (name) => {
+        setFeatureName(name);
+    }
+
+    const removeRuleHandler = (index) => {
+        removeRule(index)
+    }
+
+    const save = async () => {
+        console.log(JSON.stringify(selectedRule));
+        try {
+            const response = await fetch(addNewConfigUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(selectedRule), // Send form data as JSON
+            });
+
+            const result = await response.json();
+            navigate('/');
+            console.log('Server response:', result);
+        } catch (error) {
+            console.error('Error sending data:', error);
+        }
     }
     const updateValue = (index, event) => {
-        const newRules = [...rules];
-        newRules[index][event.target.name] = event.target.value;
-
-        setRules(newRules);
+        setValueForRule(index, event);
     }
 
     const generateRulesSection = () => {
         return (
             <div className="ruleContainer w-full">
                 {
-                    rules.map((rule, index) => ruleFormSection(rule, index))
+                    selectedRule.rules.map((rule, index) => ruleFormSection(rule, index))
                 }
             </div>
         )
@@ -61,7 +80,7 @@ const RuleForm =  () => {
                 <div className="p-2 w-1/4">
                     <div className="relative">
                         <button
-                            onClick={(e) => removeRule(index)}
+                            onClick={(e) => removeRuleHandler(index)}
                             className="flex mx-auto text-white bg-indigo-500 border-0 py-2
                                  px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Remove
                         </button>
@@ -88,8 +107,8 @@ const RuleForm =  () => {
                                 <div className="relative">
                                     <input type="text" id="featurName" name="featurName"
                                            placeholder="Feature Name"
-                                           value={featureName}
-                                           onChange={(e) => setFeatureName(e.target.value)}
+                                           value={selectedRule.featureName}
+                                           onChange={(e) => featureNameHandler(e.target.value)}
                                            className="w-full bg-gray-100 bg-opacity-50 rounded
                                            border border-gray-300 focus:border-indigo-500 focus:bg-white
                                            focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700
@@ -101,14 +120,16 @@ const RuleForm =  () => {
 
                             <div className="p-2 w-0.5/4">
                                 <button
-                                    onClick={(e) => addNewRule()}
+                                    onClick={(e) => addNewRuleHandler()}
                                     className="flex text-white bg-indigo-500 border-0 py-2
                                  px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Add Rule
                                 </button>
                             </div>
 
                             <div className="p-2 w-0.5/4">
-                                <button className="flex text-white bg-indigo-500 border-0 py-2
+                                <button
+                                    onClick={() => save()}
+                                    className="flex text-white bg-indigo-500 border-0 py-2
                                  px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Save
                                 </button>
                             </div>
