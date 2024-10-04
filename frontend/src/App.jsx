@@ -2,37 +2,21 @@ import {useState} from "react";
 
 function App() {
 
-    const [rules, setRules] = useState([{url: '', host: '', id: Date.now()}]);
-    const [featurName, setFeatureName] = useState('');
+    const [rules, setRules] = useState([{url: '', host: ''}]);
+    const [featureName, setFeatureName] = useState('');
 
-    const handleAddNewRule = () => {
-        const newRules = [...rules];
-        newRules.push({url: '', host: '', id: Date.now()});
-        setRules(newRules);
+    const addNewRule = () => {
+        setRules([...rules, {url: '', host: ''}]);
     }
 
-    const handleRemoveRule = (id) => {
-        const newRules = rules.filter((rule, i) => rule.id !== id).map((rule => {
-            return {
-                url: rule.url,
-                host: rule.host,
-                id: rule.id
-            }
-        }));
-        setRules(newRules);
+    const removeRule = (index) => {
+        let data = [...rules];
+        data.splice(index, 1);
+        setRules(data);
     }
-    const handleUrlChange = (index, event) => {
+    const updateValue = (index, event) => {
         const newRules = [...rules];
-
-        newRules[index].url = event.value;
-
-        setRules(newRules);
-    }
-
-    const handleHostChange = (index, event) => {
-        const newRules = [...rules];
-
-        newRules[index].host = event.value;
+        newRules[index][event.target.name] = event.target.value;
 
         setRules(newRules);
     }
@@ -54,7 +38,7 @@ function App() {
                         <input type="text" id="url" name="url"
                                placeholder="URL Matcher"
                                value={rule.url}
-                               onChange={(e) => handleUrlChange(index, e)}
+                               onChange={(e) => updateValue(index, e)}
                                className="w-full bg-gray-100 bg-opacity-50 rounded
                                            border border-gray-300 focus:border-indigo-500 focus:bg-white
                                            focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700
@@ -66,7 +50,7 @@ function App() {
                         <input type="text" id="host" name="host"
                                placeholder="Host"
                                value={rule.host}
-                               onChange={(e) => handleHostChange(index, e)}
+                               onChange={(e) => updateValue(index, e)}
                                className="w-full bg-gray-100 bg-opacity-50
                                            rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2
                                            focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3
@@ -76,7 +60,7 @@ function App() {
                 <div className="p-2 w-1/4">
                     <div className="relative">
                         <button
-                            onClick={() => handleRemoveRule(rule.id)}
+                            onClick={(e) => removeRule(index)}
                             className="flex mx-auto text-white bg-indigo-500 border-0 py-2
                                  px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Remove
                         </button>
@@ -100,7 +84,7 @@ function App() {
                                 <div className="relative">
                                     <input type="text" id="featurName" name="featurName"
                                            placeholder="Feature Name"
-                                           value={featurName}
+                                           value={featureName}
                                            onChange={(e) => setFeatureName(e.target.value)}
                                            className="w-full bg-gray-100 bg-opacity-50 rounded
                                            border border-gray-300 focus:border-indigo-500 focus:bg-white
@@ -113,7 +97,7 @@ function App() {
 
                             <div className="p-2 w-0.5/4">
                                 <button
-                                    onClick={(e) => handleAddNewRule()}
+                                    onClick={(e) => addNewRule()}
                                     className="flex text-white bg-indigo-500 border-0 py-2
                                  px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Add Rule
                                 </button>
