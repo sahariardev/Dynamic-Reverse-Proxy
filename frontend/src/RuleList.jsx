@@ -1,13 +1,57 @@
 import {useRuleStore} from "./hooks/useRuleStore.js";
 import {useNavigate} from "react-router-dom";
+import {useEffect, useState} from "react";
+import {allConfigUrl} from "./config.js";
 
 const RuleList = () => {
     const {setDefaultForRule} = useRuleStore();
     const navigate = useNavigate();
 
+    const [configs, setConfigs] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchItems = async () => {
+            try {
+                const response = await fetch(allConfigUrl);
+                const data = await response.json();
+                console.log(data);
+                setConfigs(data);
+                setLoading(false);
+            } catch (error) {
+                console.error('Error fetching items:', error);
+                setLoading(false);
+            }
+        };
+
+        fetchItems();
+    }, []);
+
+
     const addNew = () => {
         setDefaultForRule();
         navigate('/form');
+    }
+
+    const renderConfig = (config) => {
+        return (
+            <tr>
+                <td className="px-4 py-3">{config.featureName}</td>
+                <td className="px-4 py-3">
+                    <div className="flex flex-wrap">
+                        <button
+                            className="flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Edit
+                        </button>
+                        <button
+                            className="flex ml-[10px] text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Delete
+                        </button>
+                        <button
+                            className="flex ml-[10px] text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Select
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        );
     }
 
     return (
@@ -30,17 +74,7 @@ const RuleList = () => {
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td className="px-4 py-3">default</td>
-                                <td className="px-4 py-3">
-                                    <div className="flex flex-wrap">
-                                        <button className="flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Edit</button>
-                                        <button className="flex ml-[10px] text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Delete</button>
-                                        <button className="flex ml-[10px] text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Select</button>
-                                    </div>
-                                </td>
-
-                            </tr>
+                             {configs.map((config) => renderConfig(config))}
                             </tbody>
                         </table>
                     </div>

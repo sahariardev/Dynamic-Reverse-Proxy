@@ -1,5 +1,5 @@
 import express from 'express';
-import {setConfig} from "./config.service.js";
+import {getAllConfigs, setConfig} from "./config.service.js";
 import cors from 'cors';
 
 const app = express();
@@ -14,6 +14,10 @@ app.post('/config', (req, res) => {
     res.json({
         message: 'Success'
     });
+});
+
+app.get('/allConfigs', (req, res) => {
+    res.json(getAllConfigs());
 });
 
 export default app;

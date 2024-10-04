@@ -8,3 +8,10 @@ export function setConfig(cookieName, rules) {
 export function getConfig(cookieName) {
     return cookieMap.get(cookieName);
 }
+
+export function getAllConfigs() {
+    return  Array.from(cookieMap, ([key, value]) => ({
+        featureName: key,
+        rules: value
+    }));
+}
