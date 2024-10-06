@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 import {allConfigUrl} from "./config.js";
 
 const RuleList = () => {
-    const {setDefaultForRule} = useRuleStore();
+    const {setDefaultForRule, updateSelectedRule} = useRuleStore();
     const navigate = useNavigate();
 
     const [configs, setConfigs] = useState([]);
@@ -33,13 +33,17 @@ const RuleList = () => {
         navigate('/form');
     }
 
-    const renderConfig = (config) => {
+    const renderConfig = (config, index) => {
         return (
-            <tr>
+            <tr key={index}>
                 <td className="px-4 py-3">{config.featureName}</td>
                 <td className="px-4 py-3">
                     <div className="flex flex-wrap">
                         <button
+                            onClick={() => {
+                                updateSelectedRule(config);
+                                navigate('/form');
+                            }}
                             className="flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Edit
                         </button>
                         <button
@@ -74,7 +78,7 @@ const RuleList = () => {
                             </tr>
                             </thead>
                             <tbody>
-                             {configs.map((config) => renderConfig(config))}
+                             {configs.map((config, index) => renderConfig(config, index))}
                             </tbody>
                         </table>
                     </div>

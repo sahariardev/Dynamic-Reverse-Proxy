@@ -2,7 +2,7 @@ import {create} from 'zustand';
 
 export const useRuleStore = create((set) => ({
     selectedRule: {
-        featureName: 'asdas',
+        featureName: '',
         rules: [
             {
                 url: '',
@@ -10,7 +10,14 @@ export const useRuleStore = create((set) => ({
             }
         ]
     },
-    updateSelectedRule: (rule) => set({selectedRule: rule}),
+    updateSelectedRule: (rule) => set((oldRule) => {
+        return {
+            selectedRule: {
+                featureName: rule.featureName,
+                rules: [...rule.rules]
+            }
+        }
+    }),
     setFeatureName: (name) => set((oldRule) => {
         return {
             selectedRule : {
