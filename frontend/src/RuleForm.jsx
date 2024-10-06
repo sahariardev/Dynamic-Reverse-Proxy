@@ -20,7 +20,6 @@ const RuleForm =  () => {
     }
 
     const save = async () => {
-        console.log(JSON.stringify(selectedRule));
         try {
             const response = await fetch(addNewConfigUrl, {
                 method: 'POST',

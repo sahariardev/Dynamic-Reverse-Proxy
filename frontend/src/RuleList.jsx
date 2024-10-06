@@ -1,7 +1,8 @@
 import {useRuleStore} from "./hooks/useRuleStore.js";
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {allConfigUrl} from "./config.js";
+import {addNewConfigUrl, allConfigUrl, deleteConfigUrl} from "./config.js";
+import config from "tailwindcss/defaultConfig.js";
 
 const RuleList = () => {
     const {setDefaultForRule, updateSelectedRule} = useRuleStore();
@@ -33,6 +34,26 @@ const RuleList = () => {
         navigate('/form');
     }
 
+    const deleteConfig = async (featureName) => {
+        try {
+            const response = await fetch(deleteConfigUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({featureName: featureName}),
+            });
+
+            const result = await response.json();
+            console.log('Server response:', result);
+
+            setConfigs(configs.filter(config => config.featureName !== featureName));
+
+        } catch (error) {
+            console.error('Error sending data:', error);
+        }
+    }
+
     const renderConfig = (config, index) => {
         return (
             <tr key={index}>
@@ -47,6 +68,9 @@ const RuleList = () => {
                             className="flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Edit
                         </button>
                         <button
+                            onClick={() => {
+                                deleteConfig(config.featureName);
+                            }}
                             className="flex ml-[10px] text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Delete
                         </button>
                         <button

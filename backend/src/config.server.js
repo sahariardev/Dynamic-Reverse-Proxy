@@ -1,5 +1,5 @@
 import express from 'express';
-import {getAllConfigs, setConfig} from "./config.service.js";
+import {getAllConfigs, removeConfig, setConfig} from "./config.service.js";
 import cors from 'cors';
 
 const app = express();
@@ -10,6 +10,15 @@ app.use(express.json());
 
 app.post('/config', (req, res) => {
     setConfig(req.body.featureName, req.body.rules);
+
+    res.json({
+        message: 'Success'
+    });
+});
+
+app.post('/deleteConfig', (req, res) => {
+    const featureName = req.body.featureName;
+    removeConfig(featureName);
 
     res.json({
         message: 'Success'

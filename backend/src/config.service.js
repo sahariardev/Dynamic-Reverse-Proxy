@@ -9,6 +9,10 @@ export function getConfig(cookieName) {
     return cookieMap.get(cookieName);
 }
 
+export function removeConfig(cookieName) {
+    cookieMap.delete(cookieName)
+}
+
 export function getAllConfigs() {
     return  Array.from(cookieMap, ([key, value]) => ({
         featureName: key,
