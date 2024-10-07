@@ -2,8 +2,12 @@ import express from 'express';
 import httpProxy from 'http-proxy';
 import cookieParser from 'cookie-parser';
 import {getConfig} from "./config.service.js";
+import cors from 'cors';
 
 const app = express();
+app.use(cors({
+    origin: 'http://localhost:5173'
+}));
 
 app.use(cookieParser());
 const proxy = httpProxy.createProxy({});
@@ -23,11 +27,10 @@ app.use('/', (req, res, next) => {
 
     let rules = getConfig(workingFeature);
 
-    if(!rules) {
+    if (!rules) {
         res.redirect('/reverseProxyError');
         return;
     }
-
 
     let target = '';
 
@@ -46,6 +49,11 @@ app.use('/', (req, res, next) => {
 
     if (targetRule == null) {
         targetRule = defaultRule;
+    }
+
+    if (targetRule == null) {
+        res.redirect('/reverseProxyError');
+        return;
     }
 
     return proxy.web(req, res, {target: targetRule.path, changeOrigin: true}, (error) => {

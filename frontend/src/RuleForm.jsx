@@ -1,7 +1,7 @@
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {useRuleStore} from "./hooks/useRuleStore.js";
-import {addNewConfigUrl} from "./config.js";
+import {addNewConfigUrl, selectConfigUrl} from "./config.js";
 
 const RuleForm =  () => {
 
