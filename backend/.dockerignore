@@ -1,0 +1,17 @@
+# Ignore node_modules
+node_modules
+
+# Ignore logs
+logs
+*.log
+
+# Ignore temporary files
+tmp
+*.tmp
+
+# Ignore environment files (if needed)
+.env
+
+# Ignore Dockerfile and .dockerignore (optional)
+Dockerfile
+.dockerignore

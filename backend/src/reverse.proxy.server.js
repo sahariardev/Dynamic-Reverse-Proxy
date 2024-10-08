@@ -38,11 +38,11 @@ app.use('/', (req, res, next) => {
     let targetRule = null;
 
     for (const rule of rules) {
-        if (rule.key === '/') {
+        if (rule.url === '/') {
             defaultRule = rule;
         }
 
-        if (targetRule == null && url.startsWith(rule.key)) {
+        if (targetRule == null && url.startsWith(rule.url)) {
             targetRule = rule;
         }
     }
@@ -56,7 +56,7 @@ app.use('/', (req, res, next) => {
         return;
     }
 
-    return proxy.web(req, res, {target: targetRule.path, changeOrigin: true}, (error) => {
+    return proxy.web(req, res, {target: targetRule.host, changeOrigin: true}, (error) => {
         res.redirect('/reverseProxyError');
     });
 });

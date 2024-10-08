@@ -6,6 +6,7 @@ export function setConfig(cookieName, rules) {
 }
 
 export function getConfig(cookieName) {
+    console.log(cookieMap);
     return cookieMap.get(cookieName);
 }
 

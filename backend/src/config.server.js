@@ -11,6 +11,8 @@ app.use(cors({
 }));
 app.use(express.json());
 
+app.use(express.static('public'));
+
 app.post('/config', (req, res) => {
     setConfig(req.body.featureName, req.body.rules);
 
