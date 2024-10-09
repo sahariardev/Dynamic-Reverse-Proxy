@@ -23,8 +23,6 @@ app.use('/', (req, res, next) => {
 
     const workingFeature = req.cookies.feature || 'default';
 
-    console.log(workingFeature);
-
     let rules = getConfig(workingFeature);
 
     if (!rules) {
