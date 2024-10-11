@@ -28,8 +28,23 @@ Dynamic Reverse Proxy is a powerful tool designed to manage multiple application
    cd dynamic-reverse-proxy
 3. Start the server
     ```
-   npm start
+    cd backend && npm start
+   ```
 
+## Docker Command
+  ```
+   docker run \
+     -e PATH_TO_CERT={path_to_cert} \
+     -e PATH_TO_KEY={path_to_key} \
+     -e REVERSE_PROXY_SERVER_PORT={proxy_server_port} \
+     -e REVERSE_PROXY_CONFIG_SERVER_PORT={config_server_port} \
+     -p 443:{proxy_server_port} \
+     -p {config_server_port}:{config_server_port} \
+     -v {path_to_cert}:{path_to_cert} \
+     -v {path_to_key}:{path_to_key} \
+     sahariardev/dynamic-reverse-proxy:latest
+  ``` 
+  
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](https://opensource.org/licenses/MIT) file for details.
